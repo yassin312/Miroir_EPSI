@@ -34,4 +34,4 @@ def run(string, langue= "fr"):
         print("Au revoir")
 
 if __name__ == "__main__":
-    run()
+    run("kayak", "fr")
