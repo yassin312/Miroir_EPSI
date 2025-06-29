@@ -1,4 +1,7 @@
 # tests/test_main.py
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import unittest
 from unittest.mock import patch
 from io import StringIO
@@ -14,9 +17,9 @@ class TestMain(unittest.TestCase):
         heure = 8
 
         # Act
-        resultat = main.salutation_selon_heure(heure=heure, langue="fr")
-
-        # Assert
+        translations = main.TRANSLATIONS["fr"]
+        resultat = main.salutation_selon_heure(translations, heure=heure)
+        #  Assert
         self.assertEqual(resultat, "Bonjour")
 
     # ETANT DONNE
@@ -27,7 +30,8 @@ class TestMain(unittest.TestCase):
         heure = 23
 
         # Act
-        resultat = main.salutation_selon_heure(heure=heure, langue="fr")
+        translations = main.TRANSLATIONS["fr"]
+        resultat = main.salutation_selon_heure(translations, heure=heure)
 
         # Assert
         self.assertEqual(resultat, "Bonsoir")
@@ -69,7 +73,7 @@ class TestMain(unittest.TestCase):
         mot = "radar"
 
         # Act
-        main.run(mot, langue="en")
+        main.run(mot, langue="en", mode_test=True)
 
         # Assert
         output = mock_stdout.getvalue()
@@ -85,7 +89,7 @@ class TestMain(unittest.TestCase):
         mot = "hello"
 
         # Act
-        main.run(mot, langue="en")
+        main.run(mot, langue="en", mode_test=True)
 
         # Assert
         output = mock_stdout.getvalue().splitlines()
@@ -100,7 +104,7 @@ class TestMain(unittest.TestCase):
         mot = "world"
 
         # Act
-        main.run(mot, langue="fr")
+        main.run(mot, langue="fr", mode_test=True)
 
         # Assert
         output = mock_stdout.getvalue().strip().splitlines()
@@ -109,7 +113,7 @@ class TestMain(unittest.TestCase):
         # Pour la version anglaise aussi :
         mock_stdout.truncate(0)
         mock_stdout.seek(0)
-        main.run(mot, langue="en")
+        main.run(mot, langue="en", mode_test=True)
         output_en = mock_stdout.getvalue().strip().splitlines()
         self.assertEqual(output_en[-1], "Goodbye")
 
